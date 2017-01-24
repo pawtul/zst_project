@@ -38,6 +38,10 @@ def inspect_container(name):
     #TODO: dokonczyc to!!!
 
 
+def stop_container(name):
+    pass
+
+
 if __name__ == '__main__':
     print(get_images_names())
 
