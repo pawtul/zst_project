@@ -21,6 +21,8 @@ class PyApp(gtk.Window):
         self.set_position(gtk.WIN_POS_CENTER)
 
         self.NUM_OF_BRIDGES = 0
+        self.activated_container = None
+        self.activated_image = None
 
         # sections - image
         self.sw_image = gtk.ScrolledWindow()
@@ -30,7 +32,7 @@ class PyApp(gtk.Window):
         self.update_image_data()
 
         self.tv_image = gtk.TreeView(self.store_image)
-        self.tv_image.connect("row-activated", lambda *a: None)
+        self.tv_image.connect("row-activated", self.activate_image)
         self.tv_image.set_rules_hint(True)
         self.sw_image.add(self.tv_image)
 
@@ -44,7 +46,7 @@ class PyApp(gtk.Window):
         self.update_container_data()
 
         self.tv_container = gtk.TreeView(self.store_container)
-        self.tv_container.connect("row-activated", lambda *a: None)
+        self.tv_container.connect("row-activated", self.activate_container)
         self.tv_container.set_rules_hint(True)
         self.sw_container.add(self.tv_container)
 
@@ -61,7 +63,8 @@ class PyApp(gtk.Window):
 
         self.e_spawn = gtk.Entry()
         # self.btn1.connect('clicked', lambda widget: None)
-        self.b_start.connect('clicked', lambda x: self.update_container_data())
+        # self.b_start.connect('clicked', lambda x: self.update_container_data())
+        self.b_start.connect('clicked', self.run_container)
 
         table = gtk.Table(6, 6, True)
 
@@ -100,6 +103,18 @@ class PyApp(gtk.Window):
             key = d.keys()[0]
             row = [key, d[key][0], d[key][1]]
             self.store_container.append(row)
+
+    def run_container(self, widget):
+        model = self.tv_container.get_model()
+        container_name = model[self.activated_container][0]
+        utils.restart_container(container_name)
+        self.update_container_data()
+
+    def activate_container(self, widget, row, col):
+        self.activated_container = row
+
+    def activate_image(self, widget, row, col):
+        self.activated_image = row
 
 
 PyApp(title='Manager')

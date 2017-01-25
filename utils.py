@@ -18,6 +18,11 @@ def run_container(name, command='/bin/bash'):
     # subprocess.call([
         # 'gnome-terminal', '-e',
         # '"sudo docker run -it {} {}"'.format(name, command)])
+        #
+
+def restart_container(self, name):
+    os.system(
+            'gnome-terminal -e "sudo docker restart {}"'.format(name))
 
 
 def bind_pipework(num, interface, base, ip1, ip2):
